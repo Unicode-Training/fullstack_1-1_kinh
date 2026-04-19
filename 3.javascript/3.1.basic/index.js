@@ -469,3 +469,42 @@ for (giatrikhoitao; dieukienchay; buocnhay) {
 // console.log(increment());
 // console.log(increment());
 // console.log(increment());
+
+//Đệ quy: Kỹ thuật gọi lại chính hàm đang định nghĩa để thực hiện thao tác lặp
+// - Phần cơ sở: Điều kiện dừng đệ quy (Khử đệ quy)
+// - Gọi hàm đệ quy: Gọi lại chính hàm đang định nghĩa và thay đổi đối số để tịnh tiến dần tới phần cơ sở
+
+//Cách hoạt động:
+// - Khi hàm đệ quy vẫn đang được gọi --> Lưu kết quả mỗi lần vào ngăn xếp (stack)
+// - Sau khi hàm đệ quy kết thúc --> lấy từng kết quả ở ngăn xếp và tính toán theo chiều ngược lại (first-in, last-out)
+//Lưu ý: Trong lúc hàm đệ quy chưa chạy xong, không tính toán gì mà chỉ lưu từng kết quả mỗi lần gọi đệ quy vào ngăn xếp
+
+//Áp dụng: Thường áp dụng trong các bài toán phân cấp (Chuyên mục đa cấp, menu đa cấp, xử lý array, object)
+
+// const showNumber = (n) => {
+//   console.log(n);
+//   if (n > 1) {
+//     showNumber(n - 1);
+//   }
+// };
+// showNumber(10);
+
+//Ví dụ: Tính tổng 1 + 2 + ... + n
+// const getTotal = (n) => {
+//   if (n === 1) {
+//     return n;
+//   }
+//   const result = n + getTotal(n - 1);
+//   return result;
+// };
+// console.log(getTotal(10));
+
+//10 + getTotal(9)
+//10 + 9 + getTotal(8)
+//10 + 9 + 8 + getTotal(7)
+//10 + 9 + 8 + 7 + getTotal(6)
+//10 + 9 + 8 + 7 + 6 + getTotal(5)
+//10 + 9 + 8 + 7 + 6 + 5 + getTotal(4)
+//10 + 9 + 8 + 7 + 6 + 5 + 4 + getTotal(3)
+//10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + getTotal(2)
+//10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1
