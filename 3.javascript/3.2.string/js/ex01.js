@@ -89,7 +89,71 @@ console.log(String.prototype);
 // console.log(username);
 
 //Bài tập:
-let fullname = "tạ hoàng an";
+// let fullname = "xin chào anh em javascript";
 
 //YC1: Viết hoa ký tự đầu của chuỗi trên
 //Output: Tạ hoàng an
+// fullname = fullname.charAt(0).toUpperCase() + fullname.slice(1);
+
+//YC2: Viết hoa tất cả ký đầu của mỗi từ
+//Output: Tạ Hoàng An
+
+// for (let i = 0; i < fullname.length; i++) {
+//   if (fullname[i] === " ") {
+//     const pos = i + 1;
+//     fullname =
+//       fullname.slice(0, pos) +
+//       fullname[pos].toUpperCase() +
+//       fullname.slice(pos + 1);
+//   }
+// }
+// console.log(fullname);
+
+// let str = "Chào em JavaScript anh JavaScript";
+// console.log(str.indexOf("JavaScript", 10));
+
+// let content = `Học JavaScript không khó. Học JavaScript không khó. Học JavaScript không khó.`;
+
+// let keyword = "JAVASCRIPT";
+
+// let count = 0;
+
+// let pos = content.toLowerCase().indexOf(keyword.toLowerCase());
+// let newContent =
+//   content.slice(0, pos) +
+//   `<span>${content.slice(pos, pos + keyword.length)}</span>` +
+//   content.slice(pos + keyword.length);
+
+// document.body.innerHTML = `
+// <h2>${newContent}</h2>
+// <h3>Đã tìm thấy ${count} kết quả</h3>
+// `;
+
+let content =
+  "hoc Javascript khong kho. hoc Javascript khong kho. hoc Javascript khong kho.";
+let keyword = "JAVASCRIPT";
+
+let result = "";
+let start = 0;
+let count = 0;
+
+while (true) {
+  let pos = content.toLowerCase().indexOf(keyword.toLowerCase(), start);
+  if (pos === -1) {
+    break;
+  }
+
+  result += content.slice(start, pos);
+
+  let word = content.slice(pos, pos + keyword.length);
+  result += `<span>${word}</span>`;
+
+  start = pos + keyword.length;
+
+  count++;
+}
+
+result += content.slice(start);
+// console.log(result);
+
+document.body.innerHTML = `<h2>${result}</h2>`;
