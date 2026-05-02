@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        outline: 0;
+      }
+      body {
+        height: 2000px;
+      }
+
+      .modal .modal-dialog {
+        transition: top 0.4s ease;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -100%;
+        z-index: 999;
+        background-color: #fff;
+        max-width: 80%;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+      }
+      .modal.show .modal-dialog {
+        top: 10%;
+      }
+      .modal .modal-dialog .modal-heading {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .modal .modal-dialog .close-btn {
+        display: block;
+        font-size: 20px;
+        margin-left: auto;
+        cursor: pointer;
+      }
+      .modal .modal-overlay {
+        position: absolute;
+        inset: 0;
+        background-color: #00000076;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.4s ease;
+        transition-property: opacity, visibility;
+      }
+      .modal.show .modal-overlay {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h1 id="title">Hello anh em 1</h1>
+    <h1 id="title">Hello anh em 2</h1>
+    <h2 class="sub-title">Học DOM JavaScript 1</h2>
+    <h2 class="sub-title">Học DOM JavaScript 2</h2>
+    <h3>Học Frontend 01</h3>
+    <h3>Học Frontend 02</h3>
+    <h3>Học Frontend 03</h3>
+    <h3>Học Frontend 04</h3>
+    <h3>Học Frontend 05</h3> -->
+
+    <!-- <div class="box">
+      <h2>Hello anh em 1</h2>
+      <h2>Hello anh em 2</h2>
+    </div>
+    <div class="element">
+      <h2>Hello anh em 3</h2>
+      <h2>Hello anh em 4</h2>
+    </div> -->
+
+    <!-- <button>Click me</button>
+    <h1 tabindex="1">Hello anh em</h1>
+    <input type="text" /> -->
+
+    <!-- <form>
+      <div>
+        <input type="email" class="email" placeholder="Email..." name="email" />
+      </div>
+      <div>
+        <input
+          type="password"
+          class="password"
+          placeholder="Password..."
+          name="password"
+        />
+      </div>
+      <button>Submit</button>
+    </form> -->
+
+    <!-- <button class="btn-1">Button 1</button>
+    <button class="btn-2">Button 2</button> -->
+
+    <!-- <div class="box">
+      <h1>Học javascript</h1>
+      Ducimus ipsam hic nisi quos magni officia adipisci assumenda expedita
+      ullam, architecto distinctio totam dicta sequi voluptate iure. Laboriosam
+      illo alias sapiente?
+    </div>
+    <button>Ẩn</button> -->
+    <!-- <a
+      href="https://unicode.vn"
+      target="_blank"
+      title="Hello anh em"
+      data-color="red"
+      >Unicode</a
+    > -->
+    <!-- <div class="box content-1 content-2 active">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+      exercitationem assumenda voluptates impedit. Deserunt beatae repudiandae
+      natus. Assumenda, in repudiandae corrupti eaque quod accusamus eius minus,
+      provident vero, beatae magnam.
+    </div> -->
+    <h2>Hello abc</h2>
+    <button>Open modal</button>
+    <div class="modal">
+      <div class="modal-dialog">
+        <div class="modal-heading">
+          <h2>Modal title</h2>
+          <span class="close-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo, dolor
+          expedita. At perferendis, optio quis ipsam consequuntur labore nobis
+          asperiores obcaecati recusandae officia tempore possimus veniam,
+          similique perspiciatis minima cum!
+        </div>
+      </div>
+      <div class="modal-overlay"></div>
+    </div>
+    <script src="js/ex01.js"></script>
+  </body>
+</html>
