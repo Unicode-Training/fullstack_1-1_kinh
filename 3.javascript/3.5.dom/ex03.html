@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .chatbot {
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+        width: 300px;
+        border: 1px solid #ccc;
+      }
+      .chatbot-heading {
+        display: flex;
+        background: blueviolet;
+        color: #fff;
+        justify-content: space-between;
+        padding: 10px;
+        cursor: pointer;
+      }
+      .chatbot-body {
+        padding: 10px;
+        display: none;
+      }
+      .chatbot.show .chatbot-body {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chatbot">
+      <div class="chatbot-heading">
+        <h4>Chat với chúng tôi</h4>
+        <span>Close</span>
+      </div>
+      <div class="chatbot-body">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem
+          obcaecati ratione veniam sit culpa, incidunt rem, architecto molestias
+          nostrum deserunt quae deleniti, alias nobis laboriosam. Deleniti quam
+          consequuntur beatae excepturi.
+        </p>
+      </div>
+    </div>
+    <script src="js/ex03.js"></script>
+  </body>
+</html>
