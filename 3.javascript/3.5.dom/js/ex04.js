@@ -50,7 +50,34 @@ aList.forEach((link) => {
     link.parentElement.classList.add("has-children");
     link.addEventListener("click", (e) => {
       e.preventDefault();
+      //Lấy phần tử đang active
+      const activeMenu = document.querySelector(".menu .open");
       link.parentElement.classList.toggle("open");
+      if (activeMenu) {
+        activeMenu.classList.remove("open");
+      }
     });
   }
 });
+
+// const aList = document.querySelectorAll(".menu a");
+// aList.forEach((link) => {
+//   const subMenu = link.nextElementSibling;
+//   if (subMenu) {
+//     link.parentElement.classList.add("has-children");
+//     link.addEventListener("click", (e) => {
+//       e.preventDefault();
+
+//       const isItem = link.parentElement;
+//       console.log(isItem);
+
+//       document.querySelectorAll(".has-children").forEach((item) => {
+//         console.log(item);
+//         if (item !== isItem) {
+//           item.classList.remove("open");
+//         }
+//       });
+//       link.parentElement.classList.toggle("open");
+//     });
+//   }
+// });
