@@ -19,42 +19,65 @@
 // - loading: Trạng thái khi api chưa có dữ liệu
 // - error: Thông báo lỗi nếu gọi api thất bại
 
-
-const baseURL = 'https://api.escuelajs.co/api/v1';
-const getProducts = async () => {
+const baseURL = "https://api.escuelajs.co/api/v1";
+const LIMIT = 9;
+let page = 1;
+const getTotalProducts = async (keyword = '') => {
+    const response = await fetch(`${baseURL}/products?title=${keyword}`);
+    const data = await response.json();
+    return data.length;
+}
+const getProducts = async (keyword = '') => {
     setLoading(true);
     try {
-        const response = await fetch(`${baseURL}/products`, {
-            method: 'GET',
+        const offset = (page - 1) * LIMIT;
+        const response = await fetch(`${baseURL}/products?title=${keyword}&offset=${offset}&limit=${LIMIT}`, {
+            method: "GET",
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch products');
+            throw new Error("Failed to fetch products");
         }
         const data = await response.json();
         //1. Lấy data từ server (Dạng text)
         //2. Parse text (json) --> array, object
         // const products = JSON.parse(data);
+        const total = await getTotalProducts(keyword);
+        const totalPages = Math.ceil(total / LIMIT);
         renderProducts(data);
+        renderPagination(totalPages);
     } catch (error) {
         setError(error.message);
     }
 };
-const setLoading = (isShow = true) => {
-    const productListEl = document.querySelector('.js-product-list');
-    productListEl.innerHTML = isShow ? `<div class="text-center py-3">
-        Loading...
-    </div>`: '';
+const renderPagination = (totalPages) => {
+    const paginationEl = document.querySelector('.js-pagination');
+    let html = '';
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="px-3 py-1 bg-green-600 text-white ${page === i ? 'active' : ''}">${i}</button>`;
+    }
+    paginationEl.innerHTML = html;
 }
+
+const setLoading = (isShow = true) => {
+    const productListEl = document.querySelector(".js-product-list");
+    productListEl.innerHTML = isShow
+        ? `<div class="text-center py-3">
+        Loading...
+    </div>`
+        : "";
+};
 const setError = (message) => {
-    const productListEl = document.querySelector('.js-product-list');
+    const productListEl = document.querySelector(".js-product-list");
     productListEl.innerHTML = `<div class="text-center py-3">
         ${message}
     </div>`;
-}
+};
 const renderProducts = (data) => {
-    const productListEl = document.querySelector('.js-product-list');
-    productListEl.innerHTML = data.map(product => `<div class="px-3 mb-3 w-1/3">
+    const productListEl = document.querySelector(".js-product-list");
+    productListEl.innerHTML = data
+        .map(
+            (product) => `<div class="px-3 mb-3 w-1/3">
           <div class="border border-[#ddd] p-2">
             <h2 class="text-xl">${product.title}</h2>
             <p class="py-2">Category: ${product.category.name}</p>
@@ -64,44 +87,46 @@ const renderProducts = (data) => {
                  <button class="js-delete-btn px-1 py-1 bg-red-700 text-sm text-white cursor-pointer" data-id="${product.id}">Xóa</button>
             </div>
           </div>
-        </div>`).join('')
-}
+        </div>`,
+        )
+        .join("");
+};
 
 //Create product
 const addFormEventSubmit = () => {
-    const formEl = document.querySelector('form');
-    const msgEl = document.querySelector('.js-msg');
-    const submitBtn = formEl.querySelector('button');
-    formEl.addEventListener('submit', async (e) => {
+    const formEl = document.querySelector("form");
+    const msgEl = document.querySelector(".js-msg");
+    const submitBtn = formEl.querySelector("button");
+    formEl.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData(formEl);
         const productBody = Object.fromEntries(formData.entries());
         submitBtn.disabled = true;
-        submitBtn.innerText = 'Đang lưu...';
+        submitBtn.innerText = "Đang lưu...";
         const status = await createProduct(productBody);
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Lưu thay đổi';
+        submitBtn.innerText = "Lưu thay đổi";
         if (!status) {
-            msgEl.innerText = 'Không thể thêm sản phẩm lúc này hoặc thiếu thông tin';
+            msgEl.innerText = "Không thể thêm sản phẩm lúc này hoặc thiếu thông tin";
         } else {
             getProducts(); //Làm mới dữ liệu
             formEl.reset(); //reset form
         }
-    })
-}
+    });
+};
 
 const createProduct = async (productBody) => {
     try {
         const response = await fetch(`${baseURL}/products`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 ...productBody,
                 categoryId: 1,
-                images: ["https://placehold.co/600x400"]
-            })
+                images: ["https://placehold.co/600x400"],
+            }),
         });
         if (!response.ok) {
             throw new Error("Failed to create product");
@@ -110,48 +135,94 @@ const createProduct = async (productBody) => {
     } catch {
         return false;
     }
-}
+};
 
 const addEventEditAndDelete = () => {
-    const productListEl = document.querySelector('.js-product-list');
-    productListEl.addEventListener('click', async (e) => {
+    const productListEl = document.querySelector(".js-product-list");
+    productListEl.addEventListener("click", async (e) => {
         if (e.target.classList.contains("js-edit-btn")) {
             //Nút sửa
-            const productId = e.target.getAttribute('data-id');
+            const productId = e.target.getAttribute("data-id");
             const product = await getProductById(productId);
             if (!product) {
-                return alert('Lỗi khi lấy thông tin sản phẩm');
+                return alert("Lỗi khi lấy thông tin sản phẩm");
             }
             updateDataToForm(product);
             window.scroll({
                 top: 0,
-                behavior: "smooth"
-            })
+                behavior: "smooth",
+            });
         }
-    })
-}
+    });
+};
 const updateDataToForm = (data) => {
-    const formEl = document.querySelector('form');
+    const formEl = document.querySelector("form");
     // console.dir(formEl);
     // console.log(data);
-    const fields = ['title', 'price', 'description'];
+    const fields = ["title", "price", "description"];
     fields.forEach((field) => {
         formEl.elements[field].value = data[field];
-    })
-}
+    });
+};
 const getProductById = async (productId) => {
     try {
         const response = await fetch(`${baseURL}/products/${productId}`);
         if (!response.ok) {
-            throw new Error("Failed to get product by id")
+            throw new Error("Failed to get product by id");
         }
         const data = await response.json();
         return data;
     } catch {
         return false;
     }
+};
+const addEventFilter = () => {
+    const filterEl = document.querySelector('.js-filter');
 
+    filterEl.addEventListener('input', debounce(() => {
+        const keyword = filterEl.value;
+        getProducts(keyword);
+
+    }, 500));
 }
+const debounce = (callback, timeout = 500) => {
+    let timeoutId;
+    return (...args) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => {
+            callback(...args);
+        }, timeout);
+    }
+}
+const addEventChangePage = () => {
+    const paginationEl = document.querySelector('.js-pagination');
+    paginationEl.addEventListener('click', (e) => {
+        if (e.target.localName === 'button') {
+            page = +e.target.innerText;
+            getProducts();
+        }
+    })
+}
+addEventChangePage();
+addEventFilter();
 addEventEditAndDelete();
 addFormEventSubmit();
 getProducts();
+
+//setTimeout(callback, 500)
+//keyword: title
+// t --> clearTimeout của setTimeout cũ --> setTimeout(callback, 500)
+// ti --> clearTimeout của setTimeout cũ --> setTimeout(callback, 500)
+// tit --> clearTimeout của setTimeout cũ --> setTimeout(callback, 500)
+// titl --> clearTimeout của setTimeout cũ --> setTimeout(callback, 500)
+// titile --> clearTimeout của setTimeout cũ --> setTimeout(callback, 500)
+
+//Bài tập:
+// - Đồng bộ search với phân trang: Khi chuyển trang đang không giữ được kết quả search
+// - Hoàn thiện chức năng xóa
+// - Khi thêm dữ liệu --> Cần chuyển đến trang cuối để thấy dữ liệu mới
+// - Khi update --> Giữ nguyên trang hiện tại
+// - Khi xóa --> giữ nguyên trang hiện tại
+// - Nếu trang hiện tại chỉ còn 1 sản phẩm, nếu xóa --> lùi về trang trước (Trừ trường hợp là trang 1)
