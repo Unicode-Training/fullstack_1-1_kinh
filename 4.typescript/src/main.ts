@@ -365,41 +365,124 @@
 // - getName(): string;
 // - setName(value: string): void
 
-interface IUser {
-    name: string;
-    email: string;
-    getName(): string;
-    setName(value: string): void;
-}
+// interface IUser {
+//     name: string;
+//     email: string;
+//     getName(): string;
+//     setName(value: string): void;
+// }
 
-interface IAuth {
-    isLogin: boolean;
-}
+// interface IAuth {
+//     isLogin: boolean;
+// }
 
-class User implements IUser, IAuth {
-    name: string;
-    email: string;
-    age: number;
-    isLogin: boolean;
-    //static
-    static message: string = 'Học TypeScript không khó';
-    constructor(name: string, email: string) {
-        this.name = name;
-        this.email = email;
-        this.age = 35;
-        this.isLogin = false;
-    }
-    getName(): string {
-        return this.name;
-    }
-    setName(value: string): void {
-        this.name = value;
-    }
-    //non-static
-    getMessage() {
-        console.log(this.constructor.message);
-    }
-}
-const user = new User('Hoang An', 'hoangan.web@gmail.com');
-// console.log(user);
-user.getMessage();
+// class User implements IUser, IAuth {
+//     name: string;
+//     email: string;
+//     age: number;
+//     isLogin: boolean;
+//     //static
+//     static message: string = 'Học TypeScript không khó';
+//     constructor(name: string, email: string) {
+//         this.name = name;
+//         this.email = email;
+//         this.age = 35;
+//         this.isLogin = false;
+//     }
+//     getName(): string {
+//         return this.name;
+//     }
+//     setName(value: string): void {
+//         this.name = value;
+//     }
+//     //non-static
+//     getMessage() {
+//         console.log(User.message);
+//     }
+// }
+// const user = new User('Hoang An', 'hoangan.web@gmail.com');
+// // console.log(user);
+// user.getMessage();
+
+//clone code
+//npm i
+//npm run dev
+
+
+//Module (file)
+// - namespace 1
+//   - class, interface, function, variable
+// - namespace 2
+//   - class, interface, function, variable
+
+// import b, { a } from "./home";
+// console.log(a);
+// console.log(b);
+
+// import { Home, Home2 } from "./home";
+// console.log(Home.a);
+// console.log(Home.b);
+// Home2.showMessage();
+// console.log(Home2.a);
+
+// import { ProductCategory } from "./products";
+// console.log(ProductCategory.a);
+// console.log(ProductCategory.ProductCatelog.b);
+
+// import { ProductCategory } from "./products";
+// console.log(ProductCategory.a);
+// console.log(ProductCategory.b);
+
+// type User = {
+//     name: string;
+//     email: string;
+//     age: number;
+// }
+// type UserOptional = Partial<User>;
+
+// type UserOptional = {
+//     name?: string;
+//     email?: string;
+//     age?: number;
+// }
+// type User = Required<UserOptional>;
+
+// type User = {
+//     name: string;
+//     email: string;
+//     age: number;
+// }
+// type UserReadonly = Readonly<User>;
+
+// type Role = "admin" | "user" | "guest";
+// type Permissions = Record<Role, string[]>
+// const permissions: Permissions = {
+//     admin: ["read", 'write', "delete"],
+//     user: ["read", 'write'],
+//     guest: ["read"]
+// }
+// console.log(permissions);
+
+// type Keys = "name" | "email" | "age";
+// type Test = Record<Keys, number>
+// const test: Test = {
+//     name: 1,
+//     email: 2,
+//     age: 3
+// }
+// console.log(test);
+
+// type User = {
+//     name: string;
+//     email: string;
+//     age: number;
+// }
+
+// type UserInfo = Pick<User, "name" | "email">
+
+// type User = {
+//     name: string;
+//     email: string;
+//     age: number;
+// }
+// type UserInfo = Omit<User, "email">

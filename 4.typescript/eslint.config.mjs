@@ -8,7 +8,8 @@ export default defineConfig([
   tseslint.configs.recommended,
   {
     rules: {
-      "no-empty-function": "error"
+      "no-empty-function": "error",
+      "@typescript-eslint/no-namespace": "off"
     }
   }
 ]);
