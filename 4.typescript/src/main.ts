@@ -314,8 +314,92 @@
 // } as const;
 // user.id = 10;
 
-const getUser = (id: number) => {
-    console.log(id);
+// const getUser = (id: number) => {
+//     console.log(id);
+// }
+// const id: undefined | number = undefined;
+// getUser(id!);
+
+//Class
+// - Cú pháp cơ bản giống js, bổ sung thêm phần khai báo type cho thuộc tính
+// - Phạm vi truy cập
+// + private: Chỉ truy cập nội bộ trong class
+// + public hoặc không viết gì: Truy cập được ở mọi nơi
+// + protected: Truy cập được trong nội bộ class và các class kế thừa. Bên ngoài class không truy cập
+// class User {
+//     //Khai báo kiểu dữ liệu cho thuộc tính
+//     name: string;
+//     email: string;
+//     constructor(name: string, email: string) {
+//         this.name = name;
+//         this.email = email;
+//     }
+
+//     //Phương thức
+//     getName(): string {
+//         return this.name;
+//     }
+//     getEmail(): string {
+//         return this.email;
+//     }
+// }
+
+// class Auth extends User {
+//     getInfo() {
+//         console.log(this.name);
+//         console.log(this.email);
+//     }
+// }
+// //Instance
+// const auth = new Auth('Hoàng An', 'hoangan.web@gmail.com');
+// auth.getInfo();
+// console.log(auth.name);
+
+// const user = new User('Hoàng An', 'hoangan.web@gmail.com');
+// console.log(user);
+// console.log(user.email);
+
+//Tình huống: Cần tạo class có các phương thức và thuộc tính sau
+// - name: string
+// - email: string
+// - getName(): string;
+// - setName(value: string): void
+
+interface IUser {
+    name: string;
+    email: string;
+    getName(): string;
+    setName(value: string): void;
 }
-const id: undefined | number = undefined;
-getUser(id!);
+
+interface IAuth {
+    isLogin: boolean;
+}
+
+class User implements IUser, IAuth {
+    name: string;
+    email: string;
+    age: number;
+    isLogin: boolean;
+    //static
+    static message: string = 'Học TypeScript không khó';
+    constructor(name: string, email: string) {
+        this.name = name;
+        this.email = email;
+        this.age = 35;
+        this.isLogin = false;
+    }
+    getName(): string {
+        return this.name;
+    }
+    setName(value: string): void {
+        this.name = value;
+    }
+    //non-static
+    getMessage() {
+        console.log(this.constructor.message);
+    }
+}
+const user = new User('Hoang An', 'hoangan.web@gmail.com');
+// console.log(user);
+user.getMessage();
