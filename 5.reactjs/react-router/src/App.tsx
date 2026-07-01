@@ -8,6 +8,8 @@ import Dashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
 import AuthMiddleware from "./middlewares/AuthMiddleware";
 import Login from "./pages/Login";
+import Contact from "./pages/Contact";
+import Order from "./pages/Order";
 
 export default function App() {
   return (
@@ -20,7 +22,9 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetail />} />
+          <Route path="/contact" element={<Contact />} />
           <Route element={<AuthMiddleware />}>
+            <Route path="/order/:productId" element={<Order />} />
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/users" element={<Users />} />
           </Route>
