@@ -4,6 +4,7 @@ import type { Product } from "../../types/product.type";
 import { getProductsByCategory } from "../../services/productService";
 import SafeImage from "../SafeImage";
 import { getCategoriesList } from "../../services/categoryService";
+import { getProductLink } from "../../utils/url";
 type Props = {
   categoryId: string;
 };
@@ -39,7 +40,7 @@ export default function ProductByCategory({ categoryId }: Props) {
               key={product._id}
               className="bg-[#D9D9D9] rounded-2xl overflow-hidden"
             >
-              <Link to={"#"}>
+              <Link to={getProductLink(product._id)}>
                 <SafeImage
                   src={product.image}
                   className="block h-[190px] w-full object-cover"
@@ -47,7 +48,7 @@ export default function ProductByCategory({ categoryId }: Props) {
               </Link>
               <div className="p-5">
                 <h3 className="py-3">
-                  <Link to={"#"}>{product.name}</Link>
+                  <Link to={getProductLink(product._id)}>{product.name}</Link>
                 </h3>
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-bold">

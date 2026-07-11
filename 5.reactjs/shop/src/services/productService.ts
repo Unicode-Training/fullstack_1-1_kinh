@@ -19,3 +19,13 @@ export const getProductsByCategory = async (categoryId: string, limit: number) =
         return false;
     }
 }
+
+export const getProductDetail = async (productId: string) => {
+    try {
+        const response = await axiosInstance.get(`/products/${productId}`);
+        const { data } = response;
+        return data.product;
+    } catch {
+        return false;
+    }
+}

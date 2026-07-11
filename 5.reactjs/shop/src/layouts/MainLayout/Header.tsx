@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import searchIcon from "../../assets/icons/search-icon.png";
+import { useAuthStore } from "../../store/authStore";
+import { Loader } from "lucide-react";
 export default function Header() {
+  const { user, isLoading, isAuthenticated } = useAuthStore();
   return (
     <header className="py-5 shadow-md">
       <div className="container">
@@ -27,16 +30,27 @@ export default function Header() {
             </li>
             <li>
               <ul className="flex items-center divide-x-[1px] divide-x-gray-900 -mr-5">
-                <li className="px-5">
-                  <Link to={"#"} className="font-medium">
-                    Sign up
-                  </Link>
-                </li>
-                <li className="px-5">
-                  <Link to={"#"} className="font-medium">
-                    Login
-                  </Link>
-                </li>
+                {isLoading ? (
+                  <Loader className="animate-spin" />
+                ) : isAuthenticated ? (
+                  <>
+                    <li className="px-5">Chào: {user.fullName}</li>
+                    <li className="px-5">Đăng xuất</li>
+                  </>
+                ) : (
+                  <>
+                    <li className="px-5">
+                      <Link to={"/dang-ky"} className="font-medium">
+                        Sign up
+                      </Link>
+                    </li>
+                    <li className="px-5">
+                      <Link to={"/dang-nhap"} className="font-medium">
+                        Login
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </li>
           </ul>

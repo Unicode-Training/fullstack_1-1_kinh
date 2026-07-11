@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import type { Product } from "../../types/product.type";
 import { getDealToday } from "../../services/productService";
 import SafeImage from "../SafeImage";
+import { getProductLink } from "../../utils/url";
 export default function TodayDeal() {
   const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function TodayDeal() {
               key={product._id}
               className="bg-[#D9D9D9] rounded-2xl overflow-hidden"
             >
-              <Link to={"#"}>
+              <Link to={getProductLink(product._id)}>
                 <SafeImage
                   src={product.image}
                   className="block h-[190px] w-full object-cover"
@@ -32,7 +33,7 @@ export default function TodayDeal() {
               </Link>
               <div className="p-5">
                 <h3 className="py-3">
-                  <Link to={"#"}>{product.name}</Link>
+                  <Link to={getProductLink(product._id)}>{product.name}</Link>
                 </h3>
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-bold">

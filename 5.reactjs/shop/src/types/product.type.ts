@@ -3,4 +3,10 @@ export type Product = {
     name: string;
     image: string;
     price: number;
+    gallery: string[];
+    description: string;
+    avgRating: number;
+    brand: string;
+    reviewCount: number;
+    priceDiscount: number;
 }
