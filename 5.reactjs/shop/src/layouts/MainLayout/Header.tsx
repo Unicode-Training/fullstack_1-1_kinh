@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import searchIcon from "../../assets/icons/search-icon.png";
 import { useAuthStore } from "../../store/authStore";
 import { Loader } from "lucide-react";
+import { useCartStore } from "../../store/cartStore";
 export default function Header() {
   const { user, isLoading, isAuthenticated } = useAuthStore();
+  const { quantity } = useCartStore();
   return (
     <header className="py-5 shadow-md">
       <div className="container">
@@ -35,6 +37,14 @@ export default function Header() {
                 ) : isAuthenticated ? (
                   <>
                     <li className="px-5">Chào: {user.fullName}</li>
+                    <li className="px-5">
+                      <Link to={"/carts"} className="relative">
+                        Giỏ hàng{" "}
+                        <span className="w-4 h-4 bg-amber-700 text-white text-xs rounded-full flex items-center justify-center absolute -top-1 -right-3">
+                          {quantity}
+                        </span>
+                      </Link>
+                    </li>
                     <li className="px-5">Đăng xuất</li>
                   </>
                 ) : (

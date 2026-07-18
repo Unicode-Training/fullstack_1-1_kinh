@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { addToCart } from "../../services/cartService";
 import type { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import { useCartStore } from "../../store/cartStore";
 type Props = {
   _id: string;
   name: string;
@@ -24,10 +25,14 @@ export default function ProductInfo({ ...product }: Props) {
   };
   const [quantity, setQuantity] = useState<number>(1);
   const navigate = useNavigate();
+  const { fetchCart } = useCartStore();
   const handleAddToCart = async () => {
     toast.promise(() => addToCart(quantity, product._id), {
       loading: "Đang xử lý...",
-      success: "Thêm vào giỏ hàng thành công",
+      success: () => {
+        fetchCart();
+        return "Thêm vào giỏ hàng thành công";
+      },
       error: (error: AxiosError) => {
         if (error.status === 401) {
           navigate("/dang-nhap");

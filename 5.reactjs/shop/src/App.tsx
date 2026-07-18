@@ -3,6 +3,8 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import Login from "./pages/Auth/Login";
+import ShoppingCart from "./pages/ShoppingCart";
+import AuthMiddleware from "./middlewares/AuthMiddleware";
 export default function App() {
   return (
     <Routes>
@@ -10,6 +12,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/san-pham/:productId" element={<ProductDetail />} />
         <Route path="/dang-nhap" element={<Login />} />
+        <Route element={<AuthMiddleware />}>
+          <Route path="/carts" element={<ShoppingCart />} />
+        </Route>
       </Route>
     </Routes>
   );

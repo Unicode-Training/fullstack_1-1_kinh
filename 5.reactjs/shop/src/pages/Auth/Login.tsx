@@ -2,7 +2,8 @@ import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import { login } from "../../services/authService";
 import { toast } from "sonner";
 import { saveToken } from "../../utils/auth";
-import { useAuthStore } from "../../store/authStore";
+import { useNavigate } from "react-router-dom";
+// import { useAuthStore } from "../../store/authStore";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -12,7 +13,8 @@ export default function Login() {
   const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const { setUser } = useAuthStore();
+  const navigate = useNavigate();
+  // const { setUser } = useAuthStore();
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -20,7 +22,12 @@ export default function Login() {
       loading: "Đang đăng nhập",
       success: (data) => {
         saveToken(data);
-        setUser(data.user);
+        navigate("/", {
+          state: {
+            loginPage: true,
+          },
+        });
+        // setUser(data.user);
         return "Đăng nhập thành công";
       },
       error: "Email hoặc mật khẩu không chính xác",
