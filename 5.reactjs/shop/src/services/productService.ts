@@ -29,3 +29,12 @@ export const getProductDetail = async (productId: string) => {
         return false;
     }
 }
+
+export const getReviewsProduct = async (productId: string) => {
+    try {
+        const response = await axiosInstance.get(`/products/${productId}/reviews`);
+        return response.data;
+    } catch {
+        return false;
+    }
+}

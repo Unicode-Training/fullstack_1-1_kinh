@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import type { Product } from "../../types/product.type";
 import { getDealToday } from "../../services/productService";
-import SafeImage from "../SafeImage";
-import { getProductLink } from "../../utils/url";
+import ProductCard from "../ProductCard";
 export default function TodayDeal() {
   const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
@@ -21,30 +19,7 @@ export default function TodayDeal() {
         </h2>
         <div className="py-5 grid grid-cols-4 gap-5">
           {products.map((product) => (
-            <div
-              key={product._id}
-              className="bg-[#D9D9D9] rounded-2xl overflow-hidden"
-            >
-              <Link to={getProductLink(product._id)}>
-                <SafeImage
-                  src={product.image}
-                  className="block h-[190px] w-full object-cover"
-                />
-              </Link>
-              <div className="p-5">
-                <h3 className="py-3">
-                  <Link to={getProductLink(product._id)}>{product.name}</Link>
-                </h3>
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold">
-                    {product.price.toLocaleString()}đ
-                  </span>
-                  <button className="px-3 py-2 bg-[#7D7D7D] rounded-full cursor-pointer text-white">
-                    Buy now
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </div>

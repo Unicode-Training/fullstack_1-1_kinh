@@ -1,10 +1,6 @@
-import { Star } from "lucide-react";
 import { useState, type ChangeEvent } from "react";
-import { toast } from "sonner";
-import { addToCart } from "../../services/cartService";
-import type { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
-import { useCartStore } from "../../store/cartStore";
+import AddToCartButton from "../AddToCartButton";
+import RatingStar from "./RatingStar";
 type Props = {
   _id: string;
   name: string;
@@ -13,8 +9,9 @@ type Props = {
   avgRating: number;
   reviewCount: number;
   priceDiscount: number;
+  onOpenReviewModal?: () => void;
 };
-export default function ProductInfo({ ...product }: Props) {
+export default function ProductInfo({ onOpenReviewModal, ...product }: Props) {
   const getRatingDiscount = () => {
     if (!product.price || !product.priceDiscount) {
       return 0;
@@ -24,62 +21,14 @@ export default function ProductInfo({ ...product }: Props) {
     return value.toFixed(0);
   };
   const [quantity, setQuantity] = useState<number>(1);
-  const navigate = useNavigate();
-  const { fetchCart } = useCartStore();
-  const handleAddToCart = async () => {
-    toast.promise(() => addToCart(quantity, product._id), {
-      loading: "Đang xử lý...",
-      success: () => {
-        fetchCart();
-        return "Thêm vào giỏ hàng thành công";
-      },
-      error: (error: AxiosError) => {
-        if (error.status === 401) {
-          navigate("/dang-nhap");
-          return "Bạn chưa đăng nhập hoặc đã hết phiên. Đăng nhập để tiếp tục";
-        }
-        return "Không thể thêm vào giỏ lúc này";
-      },
-    });
-  };
+
   return (
     <div className="flex flex-col gap-3">
       <h1 className="text-3xl">{product.name}</h1>
       <p className="text-lg">Brand: {product.brand}</p>
       <div className="flex gap-2 items-center">
         <span>{product.avgRating}</span>
-        <div className="flex gap-1 items-center">
-          <Star
-            fill="#FFD700"
-            color="#FFD700"
-            size={"18px"}
-            className="hover:fill-amber-600 hover:text-amber-600 cursor-pointer"
-          />
-          <Star
-            fill="#FFD700"
-            color="#FFD700"
-            size={"18px"}
-            className="hover:fill-amber-600 hover:text-amber-600 cursor-pointer"
-          />
-          <Star
-            fill="#FFD700"
-            color="#FFD700"
-            size={"18px"}
-            className="hover:fill-amber-600 hover:text-amber-600 cursor-pointer"
-          />
-          <Star
-            fill="#FFD700"
-            color="#FFD700"
-            size={"18px"}
-            className="hover:fill-amber-600 hover:text-amber-600 cursor-pointer"
-          />
-          <Star
-            fill="#CCCCCC"
-            color="#CCCCCC"
-            size={"18px"}
-            className="hover:fill-amber-600 hover:text-amber-600 cursor-pointer"
-          />
-        </div>
+        <RatingStar value={product.avgRating} onClick={onOpenReviewModal} />
         <span className="text-xs">{product.reviewCount} ratings</span>
       </div>
       <div className="h-px bg-[#ccc]"></div>
@@ -113,12 +62,13 @@ export default function ProductInfo({ ...product }: Props) {
         />
       </div>
       <div>
-        <button
+        <AddToCartButton
+          productId={product._id}
+          quantity={quantity}
           className="px-5 py-2 bg-[#FA8900] text-white cursor-pointer rounded-full"
-          onClick={handleAddToCart}
         >
           Add to cart
-        </button>
+        </AddToCartButton>
       </div>
     </div>
   );

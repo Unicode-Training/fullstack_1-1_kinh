@@ -5,10 +5,13 @@ import ProductInfo from "../components/product-detail/ProductInfo";
 import type { Product } from "../types/product.type";
 import { getProductDetail } from "../services/productService";
 import { useParams } from "react-router-dom";
+import ProductReviews from "../components/product-detail/ProductReviews";
+import ReviewModal from "../components/product-detail/ReviewModal";
 export default function ProductDetail() {
   const [product, setProduct] = useState({} as Product);
   const [isLoading, setLoading] = useState(true);
   const { productId } = useParams();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   useEffect(() => {
     const fetchProduct = async () => {
       const product = await getProductDetail(productId!);
@@ -34,11 +37,23 @@ export default function ProductDetail() {
         <phantom-ui loading={isLoading}>
           <div className="grid grid-cols-2 gap-5">
             <ProductImage image={product.image} gallery={product.gallery} />
-            <ProductInfo {...product} />
+            <ProductInfo
+              {...product}
+              onOpenReviewModal={() => {
+                setOpenModal(true);
+              }}
+            />
           </div>
           <ProductDescription description={product.description} />
+          <ProductReviews
+            productId={productId!}
+            onOpenReviewModal={() => {
+              setOpenModal(true);
+            }}
+          />
         </phantom-ui>
       </div>
+      <ReviewModal open={openModal} onClose={() => setOpenModal(false)} />
     </section>
   );
 }
