@@ -5,10 +5,10 @@ export default function Hero() {
         <div>
           <span className="text-[#888888] font-medium">#Big Fashion Sale</span>
           <h1 className="py-3 text-6xl font-bold">
-            Limited Time Offer! <br /> Up to 50% OFF!
+            Limited Time Offer! <br /> Up to 50% OFF! 1111
           </h1>
           <span className="text-[#888888] font-medium">
-            Redefine Your Everyday Style
+            Redefine Your Everyday Style 123
           </span>
         </div>
       </div>
