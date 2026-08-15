@@ -320,6 +320,6 @@ usort($array, function($a, $b) {
 // }, []);
 // print_r($result);
 
-$myArr = ['User 1', 'User 2', 'User 3', 'User 4'];
-array_splice($myArr, 1, 2, ['A', 'B', 'C']);
-print_r($myArr);
+// $myArr = ['User 1', 'User 2', 'User 3', 'User 4'];
+// array_splice($myArr, 1, 2, ['A', 'B', 'C']);
+// print_r($myArr);
