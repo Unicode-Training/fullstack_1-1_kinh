@@ -19,11 +19,12 @@ class Database
             $statement->execute($data); //truyền dữ liệu thay thế các dấu ? và thực thi
             return $statement;
         } catch (PDOException $exception) {
+            var_dump($exception->getMessage());
             return false;
         }
     }
 
-    public function create(string $table, array $data = [])
+    public function createRaw(string $table, array $data = [])
     {
 
 
@@ -56,6 +57,61 @@ class Database
 
         return $record;
     }
+
+    public function updateRaw(string $table, array | null $condition = null, array $data = [])
+    {
+
+        //UPDATE users SET name = :name, email = :email WHERE id = :id
+        $conditionString = "";
+        $condtionArrray = [];
+        if (!empty($condition)) {
+            $conditionField = $condition[0];
+            $condtionArrray = [
+                $conditionField => $data[$conditionField]
+            ];
+            unset($data[$conditionField]);
+            $conditionString = "WHERE " . implode(' ', $condition);
+        }
+
+        $keys = array_keys($data);
+        $keysMap = array_map(function ($value) {
+            return $value . " = :" . $value;
+        }, $keys);
+        $setString = implode(', ', $keysMap);
+
+        $sql = "UPDATE $table SET $setString $conditionString";
+
+        $statement = $this->getQuery($sql, [
+            ...$data,
+            ...$condtionArrray
+        ]);
+        if (!$statement) {
+            return false;
+        }
+
+        $statement = $this->getQuery("SELECT * FROM $table $conditionString", $condtionArrray);
+
+        if (!$statement) {
+            return false;
+        }
+
+        $record = (object)$statement->fetch(PDO::FETCH_ASSOC);
+
+        return $record;
+    }
+
+    public function deleteRaw(string $table, array | null $condition = [], array $data = [])
+    {
+        //DELETE FROM users WHERE id = :id
+        $conditionString = "WHERE " . implode(' ', $condition);
+        $sql = "DELETE FROM $table $conditionString";
+        $record = $this->getQuery("SELECT * FROM $table $conditionString", $data)->fetch();
+        $statement = $this->getQuery($sql, $data);
+        if (!$statement) {
+            return false;
+        }
+        return (object)$record;
+    }
 }
 
 
@@ -79,3 +135,5 @@ class Database
 // - Tư duy: Migration, Seeders
 
 //DB::where()->get()
+
+//Ví dụ Transaction
