@@ -1,0 +1,1 @@
+<h1>Chi tiết bài viết: <?php echo $params; ?></h1>
