@@ -1,0 +1,21 @@
+{
+  "name": "unicode/mvc",
+  "authors": [
+    {
+      "name": "Hoang An Unicode",
+      "email": "hoangan.web@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Core\\": "core/"
+    }
+  },
+  "scripts": {
+    "serve": "cd public && php -S localhost:3000"
+  }
+}
