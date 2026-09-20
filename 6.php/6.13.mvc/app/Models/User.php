@@ -16,4 +16,9 @@ class User
     {
         return DB::table($this->table)->create($data);
     }
+
+    public function findByEmail(string $email)
+    {
+        return DB::table($this->table)->where('email', '=', $email)->first();
+    }
 }

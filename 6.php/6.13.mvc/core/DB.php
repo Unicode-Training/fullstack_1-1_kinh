@@ -28,7 +28,7 @@ class DB extends Database
         $this->query['where'][] = [
             $field,
             $compare,
-            $value
+            "'" . $value . "'"
         ];
         return $this;
     }
@@ -38,7 +38,7 @@ class DB extends Database
         $this->query['or_where'][] = [
             $field,
             $compare,
-            $value
+            "'" . $value . "'"
         ];
         return $this;
     }
@@ -132,13 +132,20 @@ class DB extends Database
     {
         $sql = $this->compiler();
         $data = $this->getQuery($sql)->fetchAll(PDO::FETCH_ASSOC);
+        if (!$data) {
+            return null;
+        }
         return $this->transformOutput($data);
     }
 
     private function first()
     {
         $sql = $this->compiler();
+
         $data = $this->getQuery($sql)->fetch(PDO::FETCH_ASSOC);
+        if (!$data) {
+            return null;
+        }
         return $this->transformOutput($data);
     }
 

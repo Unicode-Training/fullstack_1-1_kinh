@@ -9,6 +9,10 @@ class Bootstrap
 {
     public function init()
     {
+        //Khởi tạo session
+        session_save_path(__DIR__ . '/../storage/sessions');
+        session_start();
+
         //Khởi tạo request
         $request = new Request();
 

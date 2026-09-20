@@ -17,7 +17,10 @@ class UserController
 
     public function index(Request $request)
     {
-        return View::render('users/index');
+
+        return View::render('users/index', [
+            'layout' => 'layouts/main-layout'
+        ]);
     }
 
     public function show(Request $request, string $id)

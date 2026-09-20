@@ -10,6 +10,9 @@ class HomeController
     //Action
     public function index(Request $request)
     {
-        return View::render('home/index');
+        $_SESSION['name'] = 'hoangan';
+        return View::render('home/index', [
+            'layout' => 'layouts/main-layout'
+        ]);
     }
 }
