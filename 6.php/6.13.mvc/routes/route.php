@@ -5,6 +5,9 @@ use App\Controllers\HomeController;
 use App\Controllers\UserController;
 use App\Controllers\Api\UserController as ApiUserController;
 use App\Controllers\AuthController;
+use App\Controllers\Api\AuthController as ApiAuthController;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\LoggingMiddleware;
 use Core\Route;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -23,6 +26,7 @@ Route::get('/register', [AuthController::class, 'register']);
 Route::post('/register', [AuthController::class, 'handleRegister']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-
 //API
 Route::get('/api/users', [ApiUserController::class, 'findAll']);
+Route::post('/api/auth/login', [ApiAuthController::class, 'login']);
+Route::get('/api/auth/profile', [ApiAuthController::class, 'profile'])->middleware(AuthMiddleware::class);

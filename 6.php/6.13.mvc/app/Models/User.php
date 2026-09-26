@@ -21,4 +21,9 @@ class User
     {
         return DB::table($this->table)->where('email', '=', $email)->first();
     }
+
+    public function find(int $id)
+    {
+        return DB::table($this->table)->where('id', '=', $id)->first();
+    }
 }

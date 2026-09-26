@@ -4,6 +4,7 @@ namespace Core;
 
 class Request
 {
+    public mixed $user = null;
     public function body()
     {
         $rawBody = file_get_contents('php://input');

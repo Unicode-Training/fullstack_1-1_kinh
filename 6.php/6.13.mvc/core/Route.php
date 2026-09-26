@@ -3,26 +3,65 @@
 namespace Core;
 
 use Closure;
+use Error;
 
 class Route
 {
     private static $routes = [];
+
+    private $currentRoute = [];
+
+    private static null | object $instance = null;
 
     public static function resolve(Request $request)
     {
         $path = self::getPath();
         $method = self::getMethod();
         $routeArray = self::$routes[$method] ?? [];
+
         [$handler, $params] = self::handleRoutePath($routeArray, $path);
         if ($handler) {
             if ($handler instanceof Closure) {
                 echo $handler();
             } else {
                 //Gọi controller
-                [$controllerName, $action] = $handler;
-                $instance = new $controllerName;
-                $output = $instance->$action($request, $params);
-                echo $output;
+                @[$controllerName, $action, $middlewareList] = $handler;
+
+                $isNext = false;
+                $currentMiddlewareHandle = null;
+                if (!empty($middlewareList)) {
+                    //Xử lý middleware
+                    if (is_array($middlewareList)) {
+                        //Lặp
+                        foreach ($middlewareList as $middlewareClass) {
+                            $middlewareInstance = new $middlewareClass();
+                            $currentMiddlewareHandle = $middlewareInstance->handle($request, function () use (&$isNext) {
+                                $isNext = true;
+                            });
+                        }
+                    } else {
+                        //Xử lý luôn
+                        $middlewareInstance = new $middlewareList();
+                        $currentMiddlewareHandle = $middlewareInstance->handle($request, function () use (&$isNext) {
+                            $isNext = true;
+                        });
+                    }
+                } else {
+                    $isNext = true;
+                }
+
+
+                if (!$isNext) {
+                    if (is_null($currentMiddlewareHandle)) {
+                        throw new Error("Request bị chặn bởi Middleware");
+                    } else {
+                        echo $currentMiddlewareHandle;
+                    }
+                } else {
+                    $instance = new $controllerName;
+                    $output = $instance->$action($request, $params);
+                    echo $output;
+                }
             }
         } else {
             //Gọi 404
@@ -49,26 +88,69 @@ class Route
         return [$handlerMath, $params];
     }
 
-    public static function get(string $path, mixed $handler)
+    private static function get(string $path, mixed $handler)
     {
         self::$routes['get'][$path] = $handler;
+        self::$instance->currentRoute = [
+            'method' => 'get',
+            'path' => $path
+        ];
+        return self::$instance;
     }
-    public static function post(string $path, mixed $handler)
+    private static function post(string $path, mixed $handler)
     {
         self::$routes['post'][$path] = $handler;
+        self::$instance->currentRoute = [
+            'method' => 'post',
+            'path' => $path
+        ];
+        return self::$instance;
     }
-    public static function put(string $path, mixed $handler)
+    private static function put(string $path, mixed $handler)
     {
         self::$routes['put'][$path] = $handler;
+        self::$instance->currentRoute = [
+            'method' => 'put',
+            'path' => $path
+        ];
+        return self::$instance;
     }
-    public static function patch(string $path, mixed $handler)
+    private static function patch(string $path, mixed $handler)
     {
         self::$routes['patch'][$path] = $handler;
+        self::$instance->currentRoute = [
+            'method' => 'patch',
+            'path' => $path
+        ];
+        return self::$instance;
     }
-    public static function delete(string $path, mixed $handler)
+    private static function delete(string $path, mixed $handler)
     {
         self::$routes['delete'][$path] = $handler;
+        self::$instance->currentRoute = [
+            'method' => 'delete',
+            'path' => $path
+        ];
+        return self::$instance;
     }
+
+    public static function __callStatic(string $name, array $arguments)
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$name(...$arguments);
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        if ($name == 'middleware') {
+            ['method' => $method, 'path' => $path] = self::$instance->currentRoute;
+            self::$routes[$method][$path][] = $arguments[0];
+        }
+    }
+
+    private static function middleware(string | array $middleware) {}
 
     private static function getMethod()
     {

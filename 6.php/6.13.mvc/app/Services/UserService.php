@@ -19,4 +19,10 @@ class UserService
     {
         $this->userModel->create($data);
     }
+    public function find(int $id)
+    {
+        $user =  $this->userModel->find($id);
+        unset($user->password);
+        return $user;
+    }
 }
