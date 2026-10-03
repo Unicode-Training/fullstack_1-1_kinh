@@ -26,4 +26,9 @@ class User
     {
         return DB::table($this->table)->where('id', '=', $id)->first();
     }
+
+    public function updateUser(array $userData, int $id)
+    {
+        return DB::table($this->table)->where('id', '=', $id)->update($userData);
+    }
 }

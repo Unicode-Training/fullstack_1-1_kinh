@@ -91,6 +91,7 @@ class Database
         }, $keys);
         $setString = implode(', ', $keysMap);
 
+
         $sql = "UPDATE $table SET $setString $conditionString";
 
         $statement = $this->getQuery($sql, [

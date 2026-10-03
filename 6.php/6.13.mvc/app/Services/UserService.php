@@ -22,7 +22,6 @@ class UserService
     public function find(int $id)
     {
         $user =  $this->userModel->find($id);
-        unset($user->password);
         return $user;
     }
 }

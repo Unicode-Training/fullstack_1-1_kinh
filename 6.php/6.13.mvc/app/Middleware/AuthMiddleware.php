@@ -5,6 +5,7 @@ namespace App\Middleware;
 use App\Services\UserService;
 use Closure;
 use Core\Log;
+use Core\Redis;
 use Core\Request;
 use Exception;
 use Firebase\JWT\JWT;
@@ -27,9 +28,24 @@ class AuthMiddleware
                 'message' => 'Token invalid'
             ], 401);
         }
+
+        //Check blacklist
+        // - Nếu tồn tại blacklist -> Từ chối -> Báo lỗi
+        // - Nếu không tồn tại -> Bỏ qua
+        if (Redis::exists("blacklist:{$decoded->jti}")) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token invalid'
+            ], 401);
+        }
+
+        //Lấy jti, exp
+        // Log::info(json_encode($decoded));
         $userId = $decoded->sub;
         $user = $this->userService->find($userId);
         $request->user = $user;
+        $request->jti = $decoded->jti;
+        $request->exp = $decoded->exp;
         $next();
     }
 

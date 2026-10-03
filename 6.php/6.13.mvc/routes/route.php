@@ -7,6 +7,7 @@ use App\Controllers\Api\UserController as ApiUserController;
 use App\Controllers\AuthController;
 use App\Controllers\Api\AuthController as ApiAuthController;
 use App\Middleware\AuthMiddleware;
+use App\Middleware\ForceChangePasswordMiddleware;
 use App\Middleware\LoggingMiddleware;
 use Core\Route;
 
@@ -27,6 +28,9 @@ Route::post('/register', [AuthController::class, 'handleRegister']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 //API
-Route::get('/api/users', [ApiUserController::class, 'findAll']);
+Route::get('/api/users', [ApiUserController::class, 'findAll'])->middleware([AuthMiddleware::class, ForceChangePasswordMiddleware::class]);
 Route::post('/api/auth/login', [ApiAuthController::class, 'login']);
 Route::get('/api/auth/profile', [ApiAuthController::class, 'profile'])->middleware(AuthMiddleware::class);
+Route::delete('/api/auth/logout', [ApiAuthController::class, 'logout'])->middleware(AuthMiddleware::class);
+Route::post('/api/auth/refresh-token', [ApiAuthController::class, 'refreshToken']);
+Route::patch('/api/auth/change-password', [ApiAuthController::class, 'changePassword'])->middleware(AuthMiddleware::class);

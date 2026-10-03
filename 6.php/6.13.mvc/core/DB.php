@@ -25,10 +25,11 @@ class DB extends Database
 
     private function where(string $field, string $compare, mixed $value)
     {
+        $valueParse = is_numeric($value) ? $value : "'$value'";
         $this->query['where'][] = [
             $field,
             $compare,
-            "'" . $value . "'"
+            $valueParse
         ];
         return $this;
     }

@@ -11,6 +11,6 @@ class Log
         }
         $green = "\e[0;32m";
         $reset = "\e[0m";
-        fwrite(STDOUT, $green . '[LOG]: ' . $messages . "\n" . $reset);
+        fwrite(STDOUT, $green . '[LOG]: ' . json_encode($messages) . "\n" . $reset);
     }
 }

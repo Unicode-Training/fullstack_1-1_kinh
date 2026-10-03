@@ -27,41 +27,67 @@ class Route
                 //Gọi controller
                 @[$controllerName, $action, $middlewareList] = $handler;
 
-                $isNext = false;
-                $currentMiddlewareHandle = null;
+                $isNext = [];
+                $currentMiddlewareHandle = [];
+
                 if (!empty($middlewareList)) {
                     //Xử lý middleware
                     if (is_array($middlewareList)) {
                         //Lặp
-                        foreach ($middlewareList as $middlewareClass) {
+                        foreach ($middlewareList as $index => $middlewareClass) {
                             $middlewareInstance = new $middlewareClass();
-                            $currentMiddlewareHandle = $middlewareInstance->handle($request, function () use (&$isNext) {
-                                $isNext = true;
+                            $isNext[$index] = false;
+                            $currentMiddlewareHandle[] = $middlewareInstance->handle($request, function () use (&$isNext, $index) {
+                                $isNext[$index] = true;
                             });
                         }
                     } else {
                         //Xử lý luôn
                         $middlewareInstance = new $middlewareList();
-                        $currentMiddlewareHandle = $middlewareInstance->handle($request, function () use (&$isNext) {
-                            $isNext = true;
+                        $isNext[0] = false;
+                        $currentMiddlewareHandle[] = $middlewareInstance->handle($request, function () use (&$isNext) {
+                            $isNext[0] = true;
                         });
                     }
                 } else {
-                    $isNext = true;
+                    $isNext[0] = true;
                 }
 
+                $isContinue = true;
+                if (count($isNext) > 0) {
 
-                if (!$isNext) {
-                    if (is_null($currentMiddlewareHandle)) {
-                        throw new Error("Request bị chặn bởi Middleware");
-                    } else {
-                        echo $currentMiddlewareHandle;
+                    foreach ($isNext as $index => $status) {
+                        if (!$status) {
+                            $value = $currentMiddlewareHandle[$index];
+                            $isContinue = false;
+                            break;
+                        }
                     }
-                } else {
+                }
+
+                if ($isContinue) {
                     $instance = new $controllerName;
                     $output = $instance->$action($request, $params);
                     echo $output;
+                } else {
+                    if (is_null($value)) {
+                        throw new Error("Request bị chặn bởi Middleware");
+                    } else {
+                        echo $value;
+                    }
                 }
+
+                // if (!$isNext) {
+                //     if (is_null($currentMiddlewareHandle)) {
+                //         throw new Error("Request bị chặn bởi Middleware");
+                //     } else {
+                //         echo $currentMiddlewareHandle;
+                //     }
+                // } else {
+                //     $instance = new $controllerName;
+                //     $output = $instance->$action($request, $params);
+                //     echo $output;
+                // }
             }
         } else {
             //Gọi 404
