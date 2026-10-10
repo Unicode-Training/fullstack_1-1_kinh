@@ -15,7 +15,7 @@ class AuthController
     }
     public function login(Request $request)
     {
-        $data = $this->authService->login($request->body());
+        $data = $this->authService->login($request->body(), $request);
         if (!$data) {
             return response()->json([
                 'success' => false,

@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\LoginNotice;
 use App\Models\User;
+use App\Queue\EmailQueue;
 use Core\Log;
 use Core\Redis;
+use Core\Request;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -13,12 +16,14 @@ use Firebase\JWT\Key;
 class ApiAuthService
 {
     private User | null $userModel = null;
+    private MailService $mailService;
     const ONLY_ONE_DEVICE = true;
     public function __construct()
     {
         $this->userModel = new User();
+        $this->mailService = new MailService();
     }
-    public function login(array $body)
+    public function login(array $body, Request $request)
     {
         ['email' => $email, 'password' => $password] = $body;
 
@@ -43,6 +48,23 @@ class ApiAuthService
                 Redis::setex("blacklist:{$item->jti}", $item->accessTokenTtl, 'true');
             }
         }
+
+        //Gửi email thông báo
+        // $content = "
+        // <p>Chào bạn: <span style='font-weight: bold; color: red;'>{$user->name}</span></p>
+        // <p>Bạn vừa đăng nhập vào Unicode Academy</p>
+        // <p>Dưới đây là thông tin</p>
+        // <div style='font-style: italic;'>
+        // <p>- Email: {$user->email}</p>
+        // <p>- User Agent: {$request->headers('User-Agent')}</p>
+        // </div>
+        // <p>Unicode Team</p>
+        // ";
+        // $subject = '[Unicode] - Cảnh báo đăng nhập';
+        // $this->mailService->sendMail($user->email, $subject, $content);
+
+        // new LoginNotice($user, $request);
+        new EmailQueue()->addJob('login-notice', $user);
 
         return $this->generateToken($user);
     }
