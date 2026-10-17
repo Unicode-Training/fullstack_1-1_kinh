@@ -82,6 +82,36 @@ php artisan migrate
 
 php artisan make:migration ten-file
 
+## Rollback migrate
+
+php artisan migrate:rollback --step={number}
+
+## Reset migrate
+
+php artisan migrate:reset --> Xóa hết các bảng
+
+## Refresh migrate
+
+php artisan migrate:refresh
+
+## Fresh migrate
+
+php artisan migrate:fresh
+
+## Nguyên tắc khi viết migration
+
+- Tên rõ ràng
+- Luôn tạo file migration mới khi thay đổi
+- Chú ý đến hàm down (test)
+
+## Seeders
+
+php artisan db:seed
+
+## Tạo file seeder
+
+php artisan make:seeder TenFile
+
 ## Cache
 
 1. Xóa cache view
@@ -100,3 +130,11 @@ php artisan view:clear
 - Gọi file blade vào Controller
 - Truyền các biến dữ liệu sang view
 - Viết logic hiển thị bên view
+
+## Auto deploy
+
+- cd /home/unicode.vn
+- git pull origin main
+- composer install
+- php artisan migrate
+- service php-fpm restart
