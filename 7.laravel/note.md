@@ -138,3 +138,32 @@ php artisan view:clear
 - composer install
 - php artisan migrate
 - service php-fpm restart
+
+## Thao tác với Db
+
+1. ORM
+
+- Kỹ thuật ánh xạ: Object của php -> Database
+- Phụ thuộc vào model
+- Cú pháp cơ bản:
+
+TenModel::find()
+TenModel::all()
+
+Các thông tin: tên bảng, khóa chính, created_at, updated_at -> Cấu hình trong file model
+
+2. Query builder
+
+DB::table('ten-bang')->select('cot1', 'cot2')->get()
+
+Lưu ý: Sự kết hợp giữa ORM và Query Builder (Cú pháp)
+
+Ở trong các truy vấn phức tạp -> Dùng cú pháp Query Builder ở trong ORM
+
+Các method orm
+
+- all() -> Lấy tất cả bản ghi
+- orderBy() -> Sắp xếp
+- limit() -> Giới hạn bản ghi (Có thể dùng take())
+- offset() -> Bỏ qua bản ghi (Có thể dùng skip())
+- where() -> Lọc dữ liệu
