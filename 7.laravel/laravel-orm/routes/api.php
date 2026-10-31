@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserCourseController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/products', [ProductController::class, 'findAll']);
@@ -19,3 +21,11 @@ Route::delete('/users/{id}', [UserController::class, 'delete']);
 
 Route::post('/users/{id}/posts', [UserController::class, 'createPost']);
 Route::get('/users/{id}/posts', [UserController::class, 'findAllPosts']);
+
+Route::get('/courses', [CourseController::class, 'findAll']);
+Route::post('/courses', [CourseController::class, 'create']);
+
+Route::post('/users-courses/{userId}/{courseId}', [UserCourseController::class, 'addCourse']);
+Route::delete('/users-courses/{userId}/{courseId}', [UserCourseController::class, 'removeCourse']);
+Route::put('/users-courses/{userId}', [UserCourseController::class, 'syncCourses']);
+Route::get('/users-courses/{courseId}/users', [UserCourseController::class, 'findUsersByCourse']);

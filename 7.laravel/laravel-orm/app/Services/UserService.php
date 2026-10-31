@@ -10,7 +10,9 @@ class UserService
 {
     public function findAll()
     {
-        return User::with('phone')->get();
+        return User::with(['phone', 'courses' => function ($query) {
+            $query->orderByPivot('created_at', 'desc')->limit(1);
+        }])->get();
     }
 
     public function find(int $id)

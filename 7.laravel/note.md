@@ -167,3 +167,8 @@ Các method orm
 - limit() -> Giới hạn bản ghi (Có thể dùng take())
 - offset() -> Bỏ qua bản ghi (Có thể dùng skip())
 - where() -> Lọc dữ liệu
+
+## Validate
+
+- Web: Khi validate failed -> Tự động redirect về request trước đó
+- API: Trả về lỗi dạng json
