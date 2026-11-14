@@ -17,6 +17,7 @@
         "@laravel/multiplex": "^0.4.1"
     },
     "dependencies": {
+        "sweetalert2": "^11.26.25",
         "toastify-js": "^1.12.0"
     }
 }

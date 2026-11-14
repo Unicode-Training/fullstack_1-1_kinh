@@ -9,6 +9,7 @@
 <body>
     <div class="mx-auto py-5 max-w-300">
         @yield('content')
+        @include('partials.delete-form')
     </div>
     <script>
         const msg = "{{session('msg')}}";
